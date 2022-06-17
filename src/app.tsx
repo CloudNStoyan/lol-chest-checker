@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import LcuApi, { ChampionMasteryDTO } from "./lcu-api";
+import LcuApi from "./lcu-api";
 import GetLCUCredentials from "./lcu-connector";
-import DDragonApi from "./ddragon-api";
+import DDragonApi, { ChampionMasteryDTOWithData } from "./ddragon-api";
 import ChampionsResult from "./ChampionsResult";
-import type { ChampionDTO } from "./ddragon-api";
+import LoadingComponent from "./LoadingComponent";
+import "./index.css";
 
 const credentials = GetLCUCredentials("D:/Riot Games/League of Legends/");
 
@@ -12,29 +13,63 @@ const lcuApi = LcuApi(credentials);
 
 const ddragon = DDragonApi();
 
-console.log(ddragon);
-
-ddragon.GetVersions().then((x) => console.log(x[0]));
+console.log(lcuApi);
 
 const App = () => {
-  const [championMasteries, setChampionMasteries] =
-    useState<(ChampionMasteryDTO & ChampionDTO)[]>();
+  const [currentChampId, setCurrentChampId] = useState(0);
+  const [data, setData] = useState<undefined | ChampionMasteryDTOWithData[]>();
+  const [filteredData, setFilteredData] =
+    useState<ChampionMasteryDTOWithData[]>();
+  const [filterInput, setFilterInput] = useState("");
+
   useEffect(() => {
+    console.log(credentials);
+    if (lcuApi == null) {
+      return;
+    }
     lcuApi.GetCurrentSummoner().then(async (summoner) => {
       const masteries = await lcuApi.GetChampionMastery(summoner.summonerId);
-      const a = masteries.map((champMasteryDTO) => {
-        const champDTO = ddragon.GetChampionDataByKey(
-          champMasteryDTO.championId
-        );
-        return {
-          ...champMasteryDTO,
-          ...champDTO,
-        };
-      });
-      console.log(a);
+      const rawData = await ddragon.PopulateChampData(masteries);
+      setData(rawData);
+      setFilteredData(rawData);
     });
+
+    // lcuApi.OnChampSelect((session) => {
+    //   const playerCellId = session.localPlayerCellId;
+    //   const playerInfo = session.actions[0].find(
+    //     (action) => action.actorCellId === playerCellId
+    //   );
+
+    //   if (currentChampId != playerInfo.championId) {
+    //     setCurrentChampId(playerInfo.championId);
+    //   }
+    // });
   }, []);
-  return lcuApi !== null ? <div></div> : <></>;
+
+  useEffect(() => console.log(currentChampId), [currentChampId]);
+
+  useEffect(() => {
+    if (data === undefined) {
+      return;
+    }
+    setFilteredData(
+      data.filter((d) =>
+        d.championData.name.toLowerCase().startsWith(filterInput.toLowerCase())
+      )
+    );
+  }, [filterInput, data]);
+
+  return data !== undefined ? (
+    <div>
+      <input
+        value={filterInput}
+        onChange={(e) => setFilterInput(e.target.value)}
+      />
+      <ChampionsResult data={filteredData} />
+    </div>
+  ) : (
+    <LoadingComponent />
+  );
 };
 
 const root = createRoot(document.getElementById("root"));

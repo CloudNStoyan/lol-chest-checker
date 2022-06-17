@@ -38,11 +38,25 @@ export type ChampionMasteryDTO = {
   tokensEarned: number;
 };
 
+import WebSocket from "ws";
+
 const LcuApi = (credentials: LcuCredentials | null) => {
   if (credentials === null) {
     return null;
   }
 
+  const wsUrl = `wss://riot:${credentials.password}@127.0.0.1:${credentials.port}`;
+
+  const websocket = new WebSocket(wsUrl);
+
+  console.log(websocket);
+  websocket.on("open", () => {
+    websocket.send(JSON.stringify([5, "OnJsonApiEvent"]));
+  });
+
+  websocket.on("message", (data) => {
+    console.log(data);
+  });
   const buff = Buffer.from("riot:" + credentials.password);
 
   async function fetchRiot<T>(url: string) {
@@ -55,7 +69,6 @@ const LcuApi = (credentials: LcuCredentials | null) => {
       headers,
     };
 
-    console.log(authorization);
     const resp = await fetch(`${credentials.full}${url}`, requestOptions);
     const json: T = await resp.json();
 
@@ -76,7 +89,35 @@ const LcuApi = (credentials: LcuCredentials | null) => {
     return await GetChampionMastery(summonerId);
   };
 
-  return { GetCurrentSummoner, GetChampionMastery, GetHextechChampions };
+  const GetChampSelectSession = async () => {
+    return await fetchRiot<object>("lol-champ-select/v1/session");
+  };
+
+  const OnChampSelect = (updaterFn) => {
+    const checkIfInChampSelectIntervalId = setInterval(async () => {
+      const session = await GetChampSelectSession();
+      if (session.hasOwnProperty("errorCode")) {
+        return;
+      }
+
+      const inChampSelectInterval = setInterval(async () => {
+        const session = await GetChampSelectSession();
+        if (session.hasOwnProperty("errorCode")) {
+          clearInterval(inChampSelectInterval);
+          return;
+        }
+        updaterFn(session);
+      }, 100);
+    }, 5000);
+  };
+
+  return {
+    GetCurrentSummoner,
+    GetChampionMastery,
+    GetHextechChampions,
+    GetChampSelectSession,
+    OnChampSelect,
+  };
 };
 
 export default LcuApi;

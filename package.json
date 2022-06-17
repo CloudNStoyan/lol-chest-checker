@@ -46,7 +46,7 @@
           "@electron-forge/plugin-webpack",
           {
             "mainConfig": "./webpack.main.config.js",
-            "devContentSecurityPolicy": "connect-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:* ws://localhost:* https://127.0.0.1:* ws://127.0.0.1:* https://ddragon.leagueoflegends.com http://ddragon.leagueoflegends.com ws://ddragon.leagueoflegends.com;",
+            "devContentSecurityPolicy": "connect-src 'self' 'unsafe-eval' 'unsafe-inline' wss://*:* http://localhost:* ws://localhost:* https://127.0.0.1:* ws://127.0.0.1:* wss://127.0.0.1:* https://ddragon.leagueoflegends.com http://ddragon.leagueoflegends.com ws://ddragon.leagueoflegends.com;",
             "renderer": {
               "config": "./webpack.renderer.config.js",
               "entryPoints": [
@@ -87,6 +87,7 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.1.0",
-    "react-dom": "^18.1.0"
+    "react-dom": "^18.1.0",
+    "ws": "^8.8.0"
   }
 }

@@ -1,3 +1,5 @@
+import { ChampionMasteryDTO } from "./lcu-api";
+
 export interface ChampionsDataDTO {
   type: string;
   format: string;
@@ -59,7 +61,14 @@ export interface ChampionDTO {
   stats: Stats;
 }
 
+export type ChampionMasteryDTOWithData = ChampionMasteryDTO & {
+  championData?: ChampionDTO;
+};
+
 const DDragonApi = () => {
+  let ChampionDataCache: ChampionsDataDTO | undefined = undefined;
+  let VersionDataCache: string[] | undefined;
+
   async function GenericFetch<T>(url: string) {
     const resp = await fetch(url);
     const json: T = await resp.json();
@@ -68,15 +77,31 @@ const DDragonApi = () => {
   }
 
   const GetVersions = async () => {
-    return await GenericFetch<string[]>(
+    if (VersionDataCache) {
+      return VersionDataCache;
+    }
+
+    const data = await GenericFetch<string[]>(
       "https://ddragon.leagueoflegends.com/api/versions.json"
     );
+
+    VersionDataCache = data;
+
+    return data;
   };
 
   const GetChampionData = async (version: string) => {
-    return await GenericFetch<ChampionsDataDTO>(
+    if (ChampionDataCache) {
+      return ChampionDataCache;
+    }
+
+    const data = await GenericFetch<ChampionsDataDTO>(
       `http://ddragon.leagueoflegends.com/cdn/${version}/data/en_US/champion.json`
     );
+
+    ChampionDataCache = data;
+
+    return data;
   };
 
   const GetChampionDataByKey = async (championKey: number) => {
@@ -86,7 +111,27 @@ const DDragonApi = () => {
     return champs.find((c) => c.key === championKey.toString());
   };
 
-  return { GetVersions, GetChampionData, GetChampionDataByKey };
+  const PopulateChampData = async (data: ChampionMasteryDTOWithData[]) => {
+    const latestVersion = (await GetVersions())[0];
+    const championsJson = await GetChampionData(latestVersion);
+    const champs = Object.values(championsJson.data);
+
+    data.forEach((x) => {
+      x.championData = champs.find((y) => y.key === x.championId.toString());
+    });
+
+    return data;
+  };
+
+  const GetLatestVersion = async () => (await GetVersions())[0];
+
+  return {
+    GetLatestVersion,
+    GetVersions,
+    GetChampionData,
+    GetChampionDataByKey,
+    PopulateChampData,
+  };
 };
 
 export default DDragonApi;

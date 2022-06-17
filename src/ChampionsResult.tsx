@@ -1,17 +1,16 @@
 import React, { FunctionComponent } from "react";
-import { ChampionDTO } from "./ddragon-api";
-import { ChampionMasteryDTO } from "./lcu-api";
+import type { ChampionMasteryDTOWithData } from "./ddragon-api";
 import Champion from "./Champion";
 
 type ChampionsProps = {
-  data: (ChampionMasteryDTO & ChampionDTO)[];
+  data: ChampionMasteryDTOWithData[];
 };
 
 const ChampionsResult: FunctionComponent<ChampionsProps> = ({ data }) => {
   return (
-    <div>
-      {data.map((x) => (
-        <Champion data={x} />
+    <div className="champion-list">
+      {data.map((x, i) => (
+        <Champion data={x} key={i} />
       ))}
     </div>
   );
