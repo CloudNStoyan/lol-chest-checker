@@ -25,6 +25,9 @@ const createWindow = (): void => {
     },
   });
 
+  process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 

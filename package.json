@@ -1,8 +1,8 @@
 {
-  "name": "ts-react-app",
-  "productName": "ts-react-app",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "lol-chest-checker",
+  "productName": "lol-chest-checker",
+  "version": "1.0.1",
+  "description": "League of Legends Chest Checker",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
@@ -85,9 +85,12 @@
     "typescript": "~4.5.4"
   },
   "dependencies": {
+    "bufferutil": "^4.0.6",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "socket.io-client": "^4.5.1",
+    "utf-8-validate": "^5.0.9",
     "ws": "^8.8.0"
   }
 }
