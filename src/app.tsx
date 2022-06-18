@@ -8,8 +8,11 @@ import "./index.css";
 import useChampData from "./Hooks/useChampData";
 import ChampionWrapperStyled from "./Components/ChampionWrapper.styled";
 import BenchedChampionsList from "./Components/BenchedChampionsList";
+import fs from "fs";
 
-const credentials = GetLCUCredentials("D:/Riot Games/League of Legends/");
+const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+
+const credentials = GetLCUCredentials(config.pathToLeagueOfLegends);
 
 const lcuApi = LcuApi(credentials);
 
