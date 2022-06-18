@@ -5,10 +5,11 @@ import {
   ChampionMasteryDTO,
   ChampSelectSession,
   ChampSelectSessionFunction,
+  LcuApiCreator,
   SummonerDTO,
 } from "./lcu-types";
 
-const LcuApi = (credentials: LcuCredentials | null) => {
+const LcuApi: LcuApiCreator = (credentials: LcuCredentials | null) => {
   if (credentials === null) {
     return null;
   }
@@ -72,10 +73,6 @@ const LcuApi = (credentials: LcuCredentials | null) => {
     );
   };
 
-  const GetHextechChampions = async (summonerId: number) => {
-    return await GetChampionMastery(summonerId);
-  };
-
   const SetChampSelectSessionCallback = (
     callback: ChampSelectSessionFunction
   ) => {
@@ -85,7 +82,6 @@ const LcuApi = (credentials: LcuCredentials | null) => {
   return {
     GetCurrentSummoner,
     GetChampionMastery,
-    GetHextechChampions,
     SetChampSelectSessionCallback,
   };
 };
