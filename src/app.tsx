@@ -6,6 +6,7 @@ import ChampionsResult from "./Components/ChampionsResult";
 import LoadingComponent from "./Components/LoadingComponent";
 import "./index.css";
 import useChampData from "./Hooks/useChampData";
+import ChampionWrapperStyled from "./Components/ChampionWrapper.styled";
 
 const credentials = GetLCUCredentials("D:/Riot Games/League of Legends/");
 
@@ -17,13 +18,14 @@ const App = () => {
   const [data, filteredData, currentChamp] = useChampData(lcuApi, filterInput);
 
   return data !== undefined ? (
-    <div>
+    <ChampionWrapperStyled>
       <input
+        placeholder="Champion name.."
         value={filterInput}
         onChange={(e) => setFilterInput(e.target.value)}
       />
       <ChampionsResult data={filteredData} selectedChamp={currentChamp} />
-    </div>
+    </ChampionWrapperStyled>
   ) : (
     <LoadingComponent />
   );

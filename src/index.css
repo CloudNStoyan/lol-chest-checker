@@ -3,35 +3,9 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  background-color: ivory;
 }
 
 * {
   box-sizing: border-box;
-}
-
-.champion {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.champion.EARNED img {
-  filter: grayscale(1);
-}
-
-.champion span {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  position: absolute;
-  font-weight: 700;
-  color: #dc3545;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1;
-  width: 100%;
-  text-align: center;
-}
-
-.champion-list {
-  display: flex;
-  flex-flow: row wrap;
-  gap: 10px;
 }
