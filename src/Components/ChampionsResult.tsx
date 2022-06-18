@@ -5,16 +5,11 @@ import ChampionResultStyled from "./ChampionResult.styled";
 
 type ChampionsProps = {
   data: ChampionMasteryDTOWithData[];
-  selectedChamp: ChampionMasteryDTOWithData;
 };
 
-const ChampionsResult: FunctionComponent<ChampionsProps> = ({
-  data,
-  selectedChamp,
-}) => {
+const ChampionsResult: FunctionComponent<ChampionsProps> = ({ data }) => {
   return (
     <ChampionResultStyled>
-      <Champion data={selectedChamp} />
       {data.map((x, i) => (
         <Champion data={x} key={i} />
       ))}

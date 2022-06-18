@@ -2,7 +2,15 @@ import styled from "styled-components";
 
 const ChampionWrapperStyled = styled.div`
   margin: 10px;
-  width: 640px;
+  display: flex;
+
+  > :first-child {
+    flex: 0 0 640px;
+  }
+
+  > :last-child {
+    margin: 10px;
+  }
 
   input {
     margin: 10px 0;

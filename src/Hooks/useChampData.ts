@@ -10,7 +10,8 @@ import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 export type ChampData = [
   ChampionMasteryDTOWithData[],
   ChampionMasteryDTOWithData[],
-  ChampionMasteryDTOWithData
+  ChampionMasteryDTOWithData,
+  ChampionMasteryDTOWithData[]
 ];
 
 const ddragon = DDragonApi();
@@ -19,12 +20,12 @@ const useChampData = (
   lcuApi: LcuApi | null,
   filterInput: string
 ): ChampData => {
-  const [currentChamp, setCurrentChamp] = useState<
-    ChampionMasteryDTOWithData | undefined
-  >();
-  const [data, setData] = useState<undefined | ChampionMasteryDTOWithData[]>();
+  const [currentChamp, setCurrentChamp] =
+    useState<ChampionMasteryDTOWithData>();
+  const [data, setData] = useState<ChampionMasteryDTOWithData[]>();
   const [filteredData, setFilteredData] =
     useState<ChampionMasteryDTOWithData[]>();
+  const [benchIds, setBenchIds] = useState<ChampionMasteryDTOWithData[]>([]);
 
   useEffect(() => {
     if (lcuApi == null) {
@@ -49,16 +50,22 @@ const useChampData = (
         const playerCellId = session.localPlayerCellId;
         if (playerCellId === -1) {
           setCurrentChamp(undefined);
+          setBenchIds([]);
           return;
         }
 
-        const playerData = session.actions[0].find(
-          (action) => action.actorCellId === playerCellId
+        const playerData = session.myTeam.find(
+          (c) => c.cellId === playerCellId
         );
 
         const champ = data.find((c) => c.championId === playerData.championId);
 
+        const benchChamps = data.filter((c) =>
+          session.benchChampionIds.includes(c.championId)
+        );
+
         setCurrentChamp(champ);
+        setBenchIds(benchChamps);
       }
     );
   }, [data]);
@@ -74,7 +81,7 @@ const useChampData = (
     );
   }, [filterInput, data]);
 
-  return [data, filteredData, currentChamp];
+  return [data, filteredData, currentChamp, benchIds];
 };
 
 export default useChampData;
