@@ -87,7 +87,6 @@ const LcuApi: LcuApiCreator = (credentials: LcuCredentials | null) => {
   };
 
   const SwapWithChampion = async (championId: number) => {
-    console.log("d");
     await fetchRiot(
       `lol-champ-select/v1/session/bench/swap/${championId}`,
       "POST",

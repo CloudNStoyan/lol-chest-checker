@@ -10,8 +10,7 @@ import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 export type ChampData = [
   ChampionMasteryDTOWithData[],
   ChampionMasteryDTOWithData[],
-  ChampionMasteryDTOWithData,
-  ChampionMasteryDTOWithData[]
+  ChampionMasteryDTOWithData
 ];
 
 const ddragon = DDragonApi();
@@ -23,7 +22,7 @@ const useChampData = (
   const [currentChamp, setCurrentChamp] =
     useState<ChampionMasteryDTOWithData>();
   const [data, setData] = useState<ChampionMasteryDTOWithData[]>();
-  const [filteredData, setFilteredData] =
+  const [champBrowseData, setChampBrowseData] =
     useState<ChampionMasteryDTOWithData[]>();
   const [benchIds, setBenchIds] = useState<ChampionMasteryDTOWithData[]>([]);
 
@@ -36,7 +35,7 @@ const useChampData = (
       const masteries = await lcuApi.GetChampionMastery(summoner.summonerId);
       const rawData = await ddragon.PopulateChampData(masteries);
       setData(rawData);
-      setFilteredData(rawData);
+      setChampBrowseData(rawData);
     });
   }, []);
 
@@ -74,14 +73,14 @@ const useChampData = (
     if (data === undefined) {
       return;
     }
-    setFilteredData(
+    setChampBrowseData(
       data.filter((d) =>
         d.championData.name.toLowerCase().startsWith(filterInput.toLowerCase())
       )
     );
   }, [filterInput, data]);
 
-  return [data, filteredData, currentChamp, benchIds];
+  return [champBrowseData, benchIds, currentChamp];
 };
 
 export default useChampData;
