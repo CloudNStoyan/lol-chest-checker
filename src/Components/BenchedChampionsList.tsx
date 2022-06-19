@@ -14,13 +14,15 @@ const BenchedChampionsList: FunctionComponent<BenchedChampionsListProps> = ({
 }) => {
   return (
     <BenchedChampionsListStyled>
-      <div>
-        <Champion data={selectedChampion} />
-      </div>
-      <div>
+      <h2>Bench List</h2>
+      <div className="bench-list">
         {champions.map((c, i) => (
           <Champion data={c} key={i} />
         ))}
+      </div>
+      <h2>Current Pick</h2>
+      <div className="curr-champ">
+        <Champion data={selectedChampion} />
       </div>
     </BenchedChampionsListStyled>
   );

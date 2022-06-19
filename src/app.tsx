@@ -26,6 +26,13 @@ const App = () => {
 
   return data !== undefined ? (
     <ChampionWrapperStyled>
+      {currentChamp && (
+        <BenchedChampionsList
+          champions={benchedChampions}
+          selectedChampion={currentChamp}
+        />
+      )}
+      <h2>Browse Champions</h2>
       <div>
         <input
           placeholder="Champion name.."
@@ -34,10 +41,6 @@ const App = () => {
         />
         <ChampionsResult data={filteredData} />
       </div>
-      <BenchedChampionsList
-        champions={benchedChampions}
-        selectedChampion={currentChamp}
-      />
     </ChampionWrapperStyled>
   ) : (
     <LoadingComponent />

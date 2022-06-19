@@ -4,18 +4,23 @@ const ChampionStyled = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  flex: 0 0 20%;
-  max-width: 120px;
-  max-height: 120px;
+  width: 60px;
+  flex: 0 0 60px;
+  height: 60px;
 
   &.EARNED img {
     filter: grayscale(1);
   }
 
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
   span {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     position: absolute;
     font-weight: 700;
+    font-size: 10px;
     color: #dc3545;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;

@@ -15,8 +15,8 @@ app.commandLine.appendSwitch("ignore-certificate-errors");
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 1300,
+    height: 800,
+    width: 500,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

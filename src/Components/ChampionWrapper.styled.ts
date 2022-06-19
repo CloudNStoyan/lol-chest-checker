@@ -3,17 +3,20 @@ import styled from "styled-components";
 const ChampionWrapperStyled = styled.div`
   margin: 10px;
   display: flex;
+  flex-flow: column nowrap;
 
-  > :first-child {
-    flex: 0 0 640px;
+  h2 {
+    background-color: #a335ee;
+    color: white;
+    text-align: center;
   }
 
-  > :last-child {
-    margin: 10px;
+  h2:first-of-type {
+    margin-top: 0;
   }
 
   input {
-    margin: 10px 0;
+    margin-bottom: 20px;
     width: 100%;
     border: 3px solid #a335ee;
     border-radius: 3px;

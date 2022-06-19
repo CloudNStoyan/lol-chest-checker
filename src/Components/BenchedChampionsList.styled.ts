@@ -4,21 +4,16 @@ const BenchedChampionsListStyled = styled.div`
   display: flex;
   flex-flow: column nowrap;
 
-  > :first-child {
-    width: 600px;
-    justify-content: center;
-
-    > div {
-      margin: 0 auto;
-      border-left: 4px solid gold;
-    }
-  }
-
-  > :last-child {
-    width: 640px;
+  .bench-list {
     display: flex;
     gap: 10px;
-    margin: 10px;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .curr-champ {
+    margin: 0 auto;
+    margin-bottom: 20px;
   }
 `;
 
