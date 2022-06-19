@@ -143,6 +143,7 @@ export type LcuApi = {
   GetCurrentSummoner: () => Promise<SummonerDTO>;
   GetChampionMastery: (summonerId: number) => Promise<ChampionMasteryDTO[]>;
   SetChampSelectSessionCallback: (callback: ChampSelectSessionFunction) => void;
+  SwapWithChampion: (cahmpionId: number) => void;
 };
 
 export type LcuApiCreator = (credentials: LcuCredentials | null) => LcuApi;

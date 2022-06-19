@@ -47,20 +47,27 @@ const LcuApi: LcuApiCreator = (credentials: LcuCredentials | null) => {
 
   const buff = Buffer.from("riot:" + credentials.password);
 
-  async function fetchRiot<T>(url: string) {
+  async function fetchRiot<T>(
+    url: string,
+    method = "GET",
+    parseResponse = true
+  ) {
     const headers = new Headers();
     const authorization = "Basic " + buff.toString("base64");
     headers.append("Authorization", authorization);
 
     const requestOptions = {
-      method: "GET",
+      method: method,
       headers,
     };
 
     const resp = await fetch(`${credentials.full}${url}`, requestOptions);
-    const json: T = await resp.json();
 
-    return json;
+    if (parseResponse) {
+      const json: T = await resp.json();
+
+      return json;
+    }
   }
 
   const GetCurrentSummoner = async () => {
@@ -79,10 +86,20 @@ const LcuApi: LcuApiCreator = (credentials: LcuCredentials | null) => {
     champSelectSessionFunction = callback;
   };
 
+  const SwapWithChampion = async (championId: number) => {
+    console.log("d");
+    await fetchRiot(
+      `lol-champ-select/v1/session/bench/swap/${championId}`,
+      "POST",
+      false
+    );
+  };
+
   return {
     GetCurrentSummoner,
     GetChampionMastery,
     SetChampSelectSessionCallback,
+    SwapWithChampion,
   };
 };
 

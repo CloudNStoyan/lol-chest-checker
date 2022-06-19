@@ -9,6 +9,7 @@ import useChampData from "./Hooks/useChampData";
 import ChampionWrapperStyled from "./Components/ChampionWrapper.styled";
 import BenchedChampionsList from "./Components/BenchedChampionsList";
 import fs from "fs";
+import { ChampionMasteryDTOWithData } from "./APIs/ddragon-types";
 
 const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
@@ -30,6 +31,9 @@ const App = () => {
         <BenchedChampionsList
           champions={benchedChampions}
           selectedChampion={currentChamp}
+          onChampSelected={(c: ChampionMasteryDTOWithData) =>
+            lcuApi.SwapWithChampion(c.championId)
+          }
         />
       )}
       <h2>Browse Champions</h2>

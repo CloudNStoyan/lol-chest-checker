@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 import ChampionStyled from "./Champion.styled";
 
-type ChampionProps = {
+export type ChampionProps = {
   data: ChampionMasteryDTOWithData;
 };
 
