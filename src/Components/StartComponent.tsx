@@ -1,27 +1,18 @@
-import React, { useState } from "react";
-import ConfigCreator from "../ConfigCreator";
+import React from "react";
 import SetupComponent from "./SetupComponent";
 import LcuApi from "../APIs/lcu-api";
 import LoadingComponent from "./LoadingComponent";
 import ChampionWrapper from "./ChampionWrapper";
-
-const { config, SaveConfig, CheckIfPathIsValid } = ConfigCreator();
+import useConfig from "../Hooks/useConfig";
 
 const StartComponent = () => {
-  const [currentConfig, setCurrentConfig] = useState(config);
+  const [config, setConfig] = useConfig();
 
-  if (!currentConfig.pathToLeagueOfLegendsIsValid) {
-    return (
-      <SetupComponent
-        config={currentConfig}
-        setConfig={setCurrentConfig}
-        saveConfig={SaveConfig}
-        checkIfPathIsValid={CheckIfPathIsValid}
-      />
-    );
+  if (!config.pathToLeagueOfLegendsIsValid) {
+    return <SetupComponent config={config} setConfig={setConfig} />;
   }
 
-  const lcuApi = LcuApi(currentConfig.pathToLeagueOfLegends);
+  const lcuApi = LcuApi(config.pathToLeagueOfLegends);
 
   if (lcuApi.clientIsNotOpen === true) {
     return <LoadingComponent />;
