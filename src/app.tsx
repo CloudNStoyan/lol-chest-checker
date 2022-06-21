@@ -1,35 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
-import LcuApi from "./APIs/lcu-api";
-import LoadingComponent from "./Components/LoadingComponent";
-import ChampionWrapper from "./Components/ChampionWrapper";
-import ConfigCreator from "./ConfigCreator";
-import SetupComponent from "./Components/SetupComponent";
-import "./index.css";
-
-const { config, SaveConfig, CheckIfPathIsValid } = ConfigCreator();
+import StartComponent from "./Components/StartComponent";
+import GlobalStyled from "./Global";
 
 const App = () => {
-  const [currentConfig, setCurrentConfig] = useState(config);
-
-  if (!currentConfig.pathToLeagueOfLegendsIsValid) {
-    return (
-      <SetupComponent
-        config={currentConfig}
-        setConfig={setCurrentConfig}
-        saveConfig={SaveConfig}
-        checkIfPathIsValid={CheckIfPathIsValid}
-      />
-    );
-  }
-
-  const lcuApi = LcuApi(currentConfig.pathToLeagueOfLegends);
-
-  if (lcuApi.clientIsNotOpen === true) {
-    return <LoadingComponent />;
-  }
-
-  return <ChampionWrapper lcuApi={lcuApi} />;
+  return (
+    <>
+      <GlobalStyled />
+      <StartComponent />
+    </>
+  );
 };
 
 const root = createRoot(document.getElementById("root"));
