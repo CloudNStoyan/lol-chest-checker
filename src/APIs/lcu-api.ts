@@ -1,17 +1,22 @@
-import { LcuCredentials } from "./lcu-connector";
-
+import GetLCUCredentials from "./lcu-connector";
+import path from "path";
 import WebSocket from "ws";
 import {
   ChampionMasteryDTO,
   ChampSelectSession,
   ChampSelectSessionFunction,
+  ConnectedLcuApi,
   LcuApiCreator,
+  NotConnectedLcuApi,
   SummonerDTO,
 } from "./lcu-types";
 
-const LcuApi: LcuApiCreator = (credentials: LcuCredentials | null) => {
+const LcuApi: LcuApiCreator = (pathToLeagueOfLegends: string) => {
+  const credentials = GetLCUCredentials(pathToLeagueOfLegends);
+
   if (credentials === null) {
-    return null;
+    const notConnectedLcuApi: NotConnectedLcuApi = { clientIsNotOpen: true };
+    return notConnectedLcuApi;
   }
 
   const wsUrl = `wss://riot:${credentials.password}@127.0.0.1:${credentials.port}`;
@@ -94,12 +99,15 @@ const LcuApi: LcuApiCreator = (credentials: LcuCredentials | null) => {
     );
   };
 
-  return {
+  const connectedLcuApi: ConnectedLcuApi = {
     GetCurrentSummoner,
     GetChampionMastery,
     SetChampSelectSessionCallback,
     SwapWithChampion,
+    clientIsNotOpen: false,
   };
+
+  return connectedLcuApi;
 };
 
 export default LcuApi;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type {
   ChampSelectSession,
-  LcuApi,
+  ConnectedLcuApi,
   SummonerDTO,
 } from "../APIs/lcu-types";
 import DDragonApi from "../APIs/ddragon-api";
@@ -16,7 +16,7 @@ export type ChampData = [
 const ddragon = DDragonApi();
 
 const useChampData = (
-  lcuApi: LcuApi | null,
+  lcuApi: ConnectedLcuApi,
   filterInput: string
 ): ChampData => {
   const [currentChamp, setCurrentChamp] =
@@ -27,10 +27,6 @@ const useChampData = (
   const [benchIds, setBenchIds] = useState<ChampionMasteryDTOWithData[]>([]);
 
   useEffect(() => {
-    if (lcuApi == null) {
-      return;
-    }
-
     lcuApi.GetCurrentSummoner().then(async (summoner: SummonerDTO) => {
       const masteries = await lcuApi.GetChampionMastery(summoner.summonerId);
       const rawData = await ddragon.PopulateChampData(masteries);

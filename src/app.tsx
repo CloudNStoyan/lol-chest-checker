@@ -1,24 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import LcuApi from "./APIs/lcu-api";
-import GetLCUCredentials from "./APIs/lcu-connector";
 import LoadingComponent from "./Components/LoadingComponent";
-import "./index.css";
-import fs from "fs";
 import ChampionWrapper from "./Components/ChampionWrapper";
+import ConfigCreator from "./ConfigCreator";
+import SetupComponent from "./Components/SetupComponent";
+import "./index.css";
 
-const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-const credentials = GetLCUCredentials(config.pathToLeagueOfLegends);
-
-const lcuApi = LcuApi(credentials);
+const { config, SaveConfig, CheckIfPathIsValid } = ConfigCreator();
 
 const App = () => {
-  const clientIsNotOpen = lcuApi === null;
-  return clientIsNotOpen ? (
-    <LoadingComponent />
-  ) : (
-    <ChampionWrapper lcuApi={lcuApi} />
-  );
+  const [currentConfig, setCurrentConfig] = useState(config);
+
+  if (!currentConfig.pathToLeagueOfLegendsIsValid) {
+    return (
+      <SetupComponent
+        config={currentConfig}
+        setConfig={setCurrentConfig}
+        saveConfig={SaveConfig}
+        checkIfPathIsValid={CheckIfPathIsValid}
+      />
+    );
+  }
+
+  const lcuApi = LcuApi(currentConfig.pathToLeagueOfLegends);
+
+  if (lcuApi.clientIsNotOpen === true) {
+    return <LoadingComponent />;
+  }
+
+  return <ChampionWrapper lcuApi={lcuApi} />;
 };
 
 const root = createRoot(document.getElementById("root"));

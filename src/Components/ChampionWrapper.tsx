@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useState } from "react";
 import useChampData from "../Hooks/useChampData";
 import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
-import { LcuApi } from "../APIs/lcu-types";
+import { ConnectedLcuApi } from "../APIs/lcu-types";
 import BenchedChampionsList from "./BenchedChampionsList";
 import ChampionsResult from "./ChampionsResult";
 import ChampionWrapperStyled from "./ChampionWrapper.styled";
 
 export type ChampionWrapperProps = {
-  lcuApi: LcuApi;
+  lcuApi: ConnectedLcuApi;
 };
 
 const ChampionWrapper: FunctionComponent<ChampionWrapperProps> = ({
@@ -37,7 +37,7 @@ const ChampionWrapper: FunctionComponent<ChampionWrapperProps> = ({
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
         />
-        <ChampionsResult data={champBrowseData} />
+        {champBrowseData && <ChampionsResult data={champBrowseData} />}
       </div>
     </ChampionWrapperStyled>
   );

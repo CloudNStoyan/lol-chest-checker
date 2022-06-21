@@ -1,5 +1,3 @@
-import { LcuCredentials } from "./lcu-connector";
-
 export type SummonerDTO = {
   accountId: number;
   displayName: string;
@@ -139,11 +137,18 @@ export interface ChampSelectSession {
 
 export type ChampSelectSessionFunction = (data: ChampSelectSession) => void;
 
-export type LcuApi = {
+export type NotConnectedLcuApi = {
+  clientIsNotOpen: true;
+};
+
+export type ConnectedLcuApi = {
   GetCurrentSummoner: () => Promise<SummonerDTO>;
   GetChampionMastery: (summonerId: number) => Promise<ChampionMasteryDTO[]>;
   SetChampSelectSessionCallback: (callback: ChampSelectSessionFunction) => void;
   SwapWithChampion: (cahmpionId: number) => void;
+  clientIsNotOpen: false;
 };
 
-export type LcuApiCreator = (credentials: LcuCredentials | null) => LcuApi;
+export type LcuApiCreator = (
+  pathToLeagueOfLegends: string
+) => NotConnectedLcuApi | ConnectedLcuApi;
