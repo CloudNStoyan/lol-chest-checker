@@ -5,6 +5,7 @@ import { ConnectedLcuApi } from "../APIs/lcu-types";
 import BenchedChampionsList from "./BenchedChampionsList";
 import ChampionsResult from "./ChampionsResult";
 import ChampionWrapperStyled from "./ChampionWrapper.styled";
+import ChampionsResultFilters from "./ChampionsResultFilters";
 
 export type ChampionWrapperProps = {
   lcuApi: ConnectedLcuApi;
@@ -14,9 +15,12 @@ const ChampionWrapper: FunctionComponent<ChampionWrapperProps> = ({
   lcuApi,
 }) => {
   const [filterInput, setFilterInput] = useState("");
+  const [showEarned, setShowEarned] = useState(true);
+
   const [champBrowseData, benchedChampions, currentChamp] = useChampData(
     lcuApi,
-    filterInput
+    filterInput,
+    showEarned
   );
 
   return (
@@ -32,10 +36,11 @@ const ChampionWrapper: FunctionComponent<ChampionWrapperProps> = ({
       )}
       <h2>Browse Champions</h2>
       <div>
-        <input
-          placeholder="Champion name.."
-          value={filterInput}
-          onChange={(e) => setFilterInput(e.target.value)}
+        <ChampionsResultFilters
+          filterInput={filterInput}
+          setFilterInput={setFilterInput}
+          showEarned={showEarned}
+          setShowEarned={setShowEarned}
         />
         {champBrowseData && <ChampionsResult data={champBrowseData} />}
       </div>

@@ -17,7 +17,8 @@ const ddragon = DDragonApi();
 
 const useChampData = (
   lcuApi: ConnectedLcuApi,
-  filterInput: string
+  filterInput: string,
+  showEarned: boolean
 ): ChampData => {
   const [currentChamp, setCurrentChamp] =
     useState<ChampionMasteryDTOWithData>();
@@ -69,12 +70,17 @@ const useChampData = (
     if (data === undefined) {
       return;
     }
-    setChampBrowseData(
-      data.filter((d) =>
-        d.championData.name.toLowerCase().startsWith(filterInput.toLowerCase())
-      )
+
+    let filteredData = data.filter((d) =>
+      d.championData.name.toLowerCase().startsWith(filterInput.toLowerCase())
     );
-  }, [filterInput, data]);
+
+    if (!showEarned) {
+      filteredData = filteredData.filter((x) => !x.chestGranted);
+    }
+
+    setChampBrowseData(filteredData);
+  }, [filterInput, data, showEarned]);
 
   return [champBrowseData, benchIds, currentChamp];
 };
