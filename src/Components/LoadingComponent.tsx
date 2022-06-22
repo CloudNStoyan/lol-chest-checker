@@ -1,5 +1,5 @@
 import React from "react";
-import LoadingComponentStyled from "./LoadingComponent.styled";
+import LoadingComponentStyled from "./styles/LoadingComponent.styled";
 
 const LoadingComponent = () => {
   return (

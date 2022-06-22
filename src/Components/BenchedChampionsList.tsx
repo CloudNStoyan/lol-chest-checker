@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import type { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
-import BenchedChampionsListStyled from "./BenchedChampionsList.styled";
+import BenchedChampionsListStyled from "./styles/BenchedChampionsList.styled";
 import Champion from "./Champion";
 import ClickableChampion from "./ClickableChampion";
 

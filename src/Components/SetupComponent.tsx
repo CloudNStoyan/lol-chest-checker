@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import React, { FunctionComponent } from "react";
-import SetupComponentStyled from "./SetupComponent.styled";
+import SetupComponentStyled from "./styles/SetupComponent.styled";
 import type { SetupConfig } from "../Hooks/useConfig";
 
 export type SetupComponentProps = {

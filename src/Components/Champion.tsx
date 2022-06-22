@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
-import ChampionStyled from "./Champion.styled";
+import ChampionStyled from "./styles/Champion.styled";
 
 export type ChampionProps = {
   data: ChampionMasteryDTOWithData;

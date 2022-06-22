@@ -4,7 +4,7 @@ import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 import { ConnectedLcuApi } from "../APIs/lcu-types";
 import BenchedChampionsList from "./BenchedChampionsList";
 import ChampionsResult from "./ChampionsResult";
-import ChampionWrapperStyled from "./ChampionWrapper.styled";
+import ChampionWrapperStyled from "./styles/ChampionWrapper.styled";
 import ChampionsResultFilters from "./ChampionsResultFilters";
 
 export type ChampionWrapperProps = {
