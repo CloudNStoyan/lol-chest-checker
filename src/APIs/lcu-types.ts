@@ -21,6 +21,12 @@ export type SummonerDTO = {
   xpUntilNextLevel: number;
 };
 
+export type ChestEligibilityDTO = {
+  earnableChests: number;
+  maximumChests: number;
+  nextChestRechargeTime: number;
+};
+
 export type ChampionMasteryDTO = {
   championId: number;
   championLevel: number;
@@ -142,6 +148,7 @@ export type NotConnectedLcuApi = {
 };
 
 export type ConnectedLcuApi = {
+  GetChestEligibility: () => Promise<ChestEligibilityDTO>;
   GetCurrentSummoner: () => Promise<SummonerDTO>;
   GetChampionMastery: (summonerId: number) => Promise<ChampionMasteryDTO[]>;
   SetChampSelectSessionCallback: (callback: ChampSelectSessionFunction) => void;

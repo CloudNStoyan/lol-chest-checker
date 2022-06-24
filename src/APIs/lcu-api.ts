@@ -1,10 +1,10 @@
 import GetLCUCredentials from "./lcu-connector";
-import path from "path";
 import WebSocket from "ws";
 import {
   ChampionMasteryDTO,
   ChampSelectSession,
   ChampSelectSessionFunction,
+  ChestEligibilityDTO,
   ConnectedLcuApi,
   LcuApiCreator,
   NotConnectedLcuApi,
@@ -75,6 +75,12 @@ const LcuApi: LcuApiCreator = (pathToLeagueOfLegends: string) => {
     }
   }
 
+  const GetChestEligibility = async () => {
+    return await fetchRiot<ChestEligibilityDTO>(
+      "lol-collections/v1/inventories/chest-eligibility"
+    );
+  };
+
   const GetCurrentSummoner = async () => {
     return await fetchRiot<SummonerDTO>("lol-summoner/v1/current-summoner");
   };
@@ -100,6 +106,7 @@ const LcuApi: LcuApiCreator = (pathToLeagueOfLegends: string) => {
   };
 
   const connectedLcuApi: ConnectedLcuApi = {
+    GetChestEligibility,
     GetCurrentSummoner,
     GetChampionMastery,
     SetChampSelectSessionCallback,

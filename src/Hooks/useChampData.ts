@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type {
   ChampSelectSession,
+  ChestEligibilityDTO,
   ConnectedLcuApi,
   SummonerDTO,
 } from "../APIs/lcu-types";
@@ -34,6 +35,12 @@ const useChampData = (
       setData(rawData);
       setChampBrowseData(rawData);
     });
+
+    lcuApi
+      .GetChestEligibility()
+      .then((chestEligibility: ChestEligibilityDTO) => {
+        console.log(chestEligibility);
+      });
   }, []);
 
   useEffect(() => {
