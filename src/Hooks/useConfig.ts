@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import fs from "fs";
 import path from "path";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setConfig } from "../store/leagueSlice";
 
 export type SetupConfig = {
   pathToLeagueOfLegends: string;
@@ -16,7 +18,7 @@ const localStorageKey = "__LCC_CONFIG__";
 
 const configIsValid = (config: SetupConfig) => {
   if (!config) {
-    return;
+    return false;
   }
 
   const directoryExists = fs.existsSync(config?.pathToLeagueOfLegends);
@@ -32,18 +34,16 @@ const configIsValid = (config: SetupConfig) => {
   return isTheLeagueFolder;
 };
 
-const initialValue: SetupConfig = {
-  pathToLeagueOfLegends: null,
-  pathToLeagueOfLegendsIsValid: false,
-};
-
 const useConfig = (): UseConfigReturns => {
-  const [config, setConfig] = useState(initialValue);
+  const dispatch = useAppDispatch();
+  const config = useAppSelector((state) => state.leagueReducer.config);
+  const updateConfig = (newConfig: SetupConfig) =>
+    dispatch(setConfig(newConfig));
 
   useEffect(() => {
     const retrievedData = localStorage.getItem(localStorageKey);
 
-    let retrievedConfig: SetupConfig = null;
+    let retrievedConfig: SetupConfig;
 
     if (retrievedData) {
       try {
@@ -57,31 +57,35 @@ const useConfig = (): UseConfigReturns => {
       return;
     }
 
-    setConfig(retrievedConfig);
+    dispatch(setConfig(retrievedConfig));
   }, []);
 
   useEffect(() => {
     const isConfigValid = configIsValid(config);
     if (!isConfigValid && config.pathToLeagueOfLegendsIsValid) {
-      setConfig({
-        pathToLeagueOfLegends: config.pathToLeagueOfLegends,
-        pathToLeagueOfLegendsIsValid: false,
-      });
+      dispatch(
+        setConfig({
+          pathToLeagueOfLegends: config.pathToLeagueOfLegends,
+          pathToLeagueOfLegendsIsValid: false,
+        })
+      );
 
       return;
     }
 
     if (isConfigValid && !config.pathToLeagueOfLegendsIsValid) {
-      setConfig({
-        pathToLeagueOfLegends: config.pathToLeagueOfLegends,
-        pathToLeagueOfLegendsIsValid: true,
-      });
+      dispatch(
+        setConfig({
+          pathToLeagueOfLegends: config.pathToLeagueOfLegends,
+          pathToLeagueOfLegendsIsValid: true,
+        })
+      );
     }
 
     localStorage.setItem(localStorageKey, JSON.stringify(config));
   }, [config]);
 
-  return [config, setConfig];
+  return [config, updateConfig];
 };
 
 export default useConfig;
