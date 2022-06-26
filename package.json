@@ -1,6 +1,6 @@
 {
   "name": "lol-chest-checker",
-  "productName": "lol-chest-checker",
+  "productName": "LoLChestChecker",
   "version": "1.0.1",
   "description": "League of Legends Chest Checker",
   "main": ".webpack/main",
@@ -18,7 +18,9 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "./src/Assets/main.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -30,7 +32,8 @@
           "name": "@electron-forge/maker-zip",
           "platforms": [
             "darwin"
-          ]
+          ],
+          "config": {}
         },
         {
           "name": "@electron-forge/maker-deb",
