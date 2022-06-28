@@ -1,22 +1,19 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import fs from "fs";
 import path from "path";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { setConfig } from "../store/leagueSlice";
+import { setConfig } from "../store/configSlice";
 
 export type SetupConfig = {
   pathToLeagueOfLegends: string;
   pathToLeagueOfLegendsIsValid: boolean;
 };
 
-export type UseConfigReturns = [
-  SetupConfig,
-  React.Dispatch<React.SetStateAction<SetupConfig>>
-];
+export type UseConfigReturns = [SetupConfig, boolean];
 
-const localStorageKey = "__LCC_CONFIG__";
+export const localStorageKey = "__LCC_CONFIG__";
 
-const configIsValid = (config: SetupConfig) => {
+export const configIsValid = (config: SetupConfig) => {
   if (!config) {
     return false;
   }
@@ -36,9 +33,9 @@ const configIsValid = (config: SetupConfig) => {
 
 const useConfig = (): UseConfigReturns => {
   const dispatch = useAppDispatch();
-  const config = useAppSelector((state) => state.leagueReducer.config);
-  const updateConfig = (newConfig: SetupConfig) =>
-    dispatch(setConfig(newConfig));
+  const { config, clientIsOpen } = useAppSelector(
+    (state) => state.configReducer
+  );
 
   useEffect(() => {
     const retrievedData = localStorage.getItem(localStorageKey);
@@ -60,32 +57,7 @@ const useConfig = (): UseConfigReturns => {
     dispatch(setConfig(retrievedConfig));
   }, []);
 
-  useEffect(() => {
-    const isConfigValid = configIsValid(config);
-    if (!isConfigValid && config.pathToLeagueOfLegendsIsValid) {
-      dispatch(
-        setConfig({
-          pathToLeagueOfLegends: config.pathToLeagueOfLegends,
-          pathToLeagueOfLegendsIsValid: false,
-        })
-      );
-
-      return;
-    }
-
-    if (isConfigValid && !config.pathToLeagueOfLegendsIsValid) {
-      dispatch(
-        setConfig({
-          pathToLeagueOfLegends: config.pathToLeagueOfLegends,
-          pathToLeagueOfLegendsIsValid: true,
-        })
-      );
-    }
-
-    localStorage.setItem(localStorageKey, JSON.stringify(config));
-  }, [config]);
-
-  return [config, updateConfig];
+  return [config, clientIsOpen];
 };
 
 export default useConfig;

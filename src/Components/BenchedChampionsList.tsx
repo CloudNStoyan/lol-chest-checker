@@ -1,29 +1,25 @@
 import React, { FunctionComponent } from "react";
-import type { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 import BenchedChampionsListStyled from "./styles/BenchedChampionsList.styled";
 import Champion from "./Champion";
 import ClickableChampion from "./ClickableChampion";
+import { useAppSelector } from "../store/hooks";
+import useLcu from "../Hooks/useLcu";
 
-export type BenchedChampionsListProps = {
-  selectedChampion: ChampionMasteryDTOWithData;
-  champions: ChampionMasteryDTOWithData[];
-  onChampSelected: (c: ChampionMasteryDTOWithData) => void;
-};
+const BenchedChampionsList: FunctionComponent = () => {
+  const { benchedChampions, selectedChampion } = useAppSelector(
+    (state) => state.leagueReducer
+  );
 
-const BenchedChampionsList: FunctionComponent<BenchedChampionsListProps> = ({
-  selectedChampion,
-  champions,
-  onChampSelected,
-}) => {
+  const [lcu] = useLcu();
   return (
     <BenchedChampionsListStyled>
-      {champions.length > 0 && (
+      {benchedChampions.length > 0 && (
         <>
           <h2>Bench List</h2>
           <div className="bench-list">
-            {champions.map((c, i) => (
+            {benchedChampions.map((c, i) => (
               <ClickableChampion
-                onClick={() => onChampSelected(c)}
+                onClick={() => lcu.SwapWithChampion(c.championId)}
                 data={c}
                 key={i}
               />

@@ -1,17 +1,13 @@
 import { ipcRenderer } from "electron";
 import React, { FunctionComponent } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setConfig } from "../store/configSlice";
 import SetupComponentStyled from "./styles/SetupComponent.styled";
-import type { SetupConfig } from "../Hooks/useConfig";
 
-export type SetupComponentProps = {
-  config: SetupConfig;
-  setConfig: React.Dispatch<React.SetStateAction<SetupConfig>>;
-};
+const SetupComponent: FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+  const { config } = useAppSelector((state) => state.configReducer);
 
-const SetupComponent: FunctionComponent<SetupComponentProps> = ({
-  config,
-  setConfig,
-}) => {
   const openFileDialog = async () => {
     const path = await ipcRenderer.invoke("dialog:openFolder");
     if (!path) {
@@ -23,7 +19,7 @@ const SetupComponent: FunctionComponent<SetupComponentProps> = ({
       pathToLeagueOfLegendsIsValid: false,
     };
 
-    setConfig(newConfig);
+    dispatch(setConfig(newConfig));
   };
 
   return (

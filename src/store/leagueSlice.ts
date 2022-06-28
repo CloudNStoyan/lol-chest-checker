@@ -1,34 +1,67 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 
-export type SetupConfig = {
-  pathToLeagueOfLegends: string;
-  pathToLeagueOfLegendsIsValid: boolean;
-};
 export interface LeagueState {
-  clientIsOpen: boolean;
-  config: SetupConfig;
+  rawChampData: ChampionMasteryDTOWithData[];
+  browseChampData: ChampionMasteryDTOWithData[];
+  benchedChampions: ChampionMasteryDTOWithData[];
+  selectedChampion: ChampionMasteryDTOWithData;
+  filterInput: string;
+  showEarned: boolean;
 }
 
 const initialState: LeagueState = {
-  clientIsOpen: false,
-  config: {
-    pathToLeagueOfLegends: null,
-    pathToLeagueOfLegendsIsValid: false,
-  },
+  rawChampData: [],
+  browseChampData: [],
+  benchedChampions: [],
+  selectedChampion: null,
+  filterInput: null,
+  showEarned: true,
 };
 
 const leagueSlice = createSlice({
   name: "league",
   initialState,
   reducers: {
-    setConfig(state, action: PayloadAction<SetupConfig>) {
-      state.config = action.payload;
+    setBrowseChampData(
+      state,
+      action: PayloadAction<ChampionMasteryDTOWithData[]>
+    ) {
+      state.browseChampData = action.payload;
     },
-    setClientIsOpen(state, action: PayloadAction<boolean>) {
-      state.clientIsOpen = action.payload;
+    setRawChampData(
+      state,
+      action: PayloadAction<ChampionMasteryDTOWithData[]>
+    ) {
+      state.rawChampData = action.payload;
+    },
+    setBenchedChampsData(
+      state,
+      action: PayloadAction<ChampionMasteryDTOWithData[]>
+    ) {
+      state.benchedChampions = action.payload;
+    },
+    setSelectedChampion(
+      state,
+      action: PayloadAction<ChampionMasteryDTOWithData>
+    ) {
+      state.selectedChampion = action.payload;
+    },
+    setFilterInput(state, action: PayloadAction<string>) {
+      state.filterInput = action.payload;
+    },
+    setShowEarned(state, action: PayloadAction<boolean>) {
+      state.showEarned = action.payload;
     },
   },
 });
 
-export const { setConfig, setClientIsOpen } = leagueSlice.actions;
+export const {
+  setBrowseChampData,
+  setRawChampData,
+  setBenchedChampsData,
+  setSelectedChampion,
+  setFilterInput,
+  setShowEarned,
+} = leagueSlice.actions;
 export default leagueSlice.reducer;

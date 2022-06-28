@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import configReducer from "./configSlice";
 import leagueReducer from "./leagueSlice";
 
 export const store = configureStore({
   reducer: {
+    configReducer,
     leagueReducer,
   },
 });

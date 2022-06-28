@@ -1,15 +1,15 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
+import { useAppSelector } from "../store/hooks";
 import Champion from "./Champion";
 import ChampionResultStyled from "./styles/ChampionResult.styled";
 
-type ChampionsProps = {
-  data: ChampionMasteryDTOWithData[];
-};
+const ChampionsResult: FunctionComponent = () => {
+  const browseChampData = useAppSelector(
+    (state) => state.leagueReducer.browseChampData
+  );
 
-const ChampionsResult: FunctionComponent<ChampionsProps> = ({ data }) => {
   useEffect(() => {
-    data.sort((firstChamp, secondChamp) => {
+    browseChampData.sort((firstChamp, secondChamp) => {
       if (
         firstChamp.championData.name.toLowerCase() <
         secondChamp.championData.name.toLowerCase()
@@ -26,11 +26,11 @@ const ChampionsResult: FunctionComponent<ChampionsProps> = ({ data }) => {
 
       return 0;
     });
-  }, [data]);
+  }, [browseChampData]);
 
   return (
     <ChampionResultStyled>
-      {data.map((x, i) => (
+      {browseChampData.map((x, i) => (
         <Champion data={x} key={i} />
       ))}
     </ChampionResultStyled>

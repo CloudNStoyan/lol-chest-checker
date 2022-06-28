@@ -1,28 +1,33 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { setFilterInput, setShowEarned } from "../store/leagueSlice";
+import { useAppDispatch } from "../store/hooks";
 
-export type ChampionsResultFiltersProps = {
-  filterInput: string;
-  setFilterInput: React.Dispatch<React.SetStateAction<string>>;
-  showEarned: boolean;
-  setShowEarned: React.Dispatch<React.SetStateAction<boolean>>;
-};
+const ChampionsResultFilters: FunctionComponent = () => {
+  const dispatch = useAppDispatch();
+  const [hideEarned, setHideEarned] = useState(false);
+  const [filter, setFilter] = useState("");
 
-const ChampionsResultFilters: FunctionComponent<
-  ChampionsResultFiltersProps
-> = ({ filterInput, setFilterInput, showEarned, setShowEarned }) => {
+  useEffect(() => {
+    dispatch(setFilterInput(filter));
+  }, [filter]);
+
+  useEffect(() => {
+    dispatch(setShowEarned(!hideEarned));
+  }, [hideEarned]);
+
   return (
     <>
       <input
         placeholder="Champion name.."
-        value={filterInput}
-        onChange={(e) => setFilterInput(e.target.value)}
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
         className="filter-input"
       />
       <div className="filter-chest-granted">
         <label htmlFor="filterChestGranted">Exclude Earned</label>
         <input
-          checked={showEarned}
-          onChange={(e) => setShowEarned(e.target.checked)}
+          checked={!hideEarned}
+          onChange={(e) => setHideEarned(!e.target.checked)}
           id="filterChestGranted"
           type="checkbox"
         />

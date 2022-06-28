@@ -7,7 +7,7 @@ export type ChampionProps = {
 };
 
 const Champion: FunctionComponent<ChampionProps> = ({ data }) => {
-  if (data === undefined) {
+  if (!data) {
     return <></>;
   }
 

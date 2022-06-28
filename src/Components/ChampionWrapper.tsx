@@ -1,48 +1,17 @@
-import React, { FunctionComponent, useState } from "react";
-import useChampData from "../Hooks/useChampData";
-import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
-import { ConnectedLcuApi } from "../APIs/lcu-types";
+import React, { FunctionComponent } from "react";
 import BenchedChampionsList from "./BenchedChampionsList";
 import ChampionsResult from "./ChampionsResult";
 import ChampionWrapperStyled from "./styles/ChampionWrapper.styled";
 import ChampionsResultFilters from "./ChampionsResultFilters";
 
-export type ChampionWrapperProps = {
-  lcuApi: ConnectedLcuApi;
-};
-
-const ChampionWrapper: FunctionComponent<ChampionWrapperProps> = ({
-  lcuApi,
-}) => {
-  const [filterInput, setFilterInput] = useState("");
-  const [showEarned, setShowEarned] = useState(true);
-
-  const [champBrowseData, benchedChampions, currentChamp] = useChampData(
-    lcuApi,
-    filterInput,
-    showEarned
-  );
-
+const ChampionWrapper: FunctionComponent = () => {
   return (
     <ChampionWrapperStyled>
-      {currentChamp && (
-        <BenchedChampionsList
-          champions={benchedChampions}
-          selectedChampion={currentChamp}
-          onChampSelected={(c: ChampionMasteryDTOWithData) =>
-            lcuApi.SwapWithChampion(c.championId)
-          }
-        />
-      )}
+      <BenchedChampionsList />
       <h2>Browse Champions</h2>
       <div>
-        <ChampionsResultFilters
-          filterInput={filterInput}
-          setFilterInput={setFilterInput}
-          showEarned={showEarned}
-          setShowEarned={setShowEarned}
-        />
-        {champBrowseData && <ChampionsResult data={champBrowseData} />}
+        <ChampionsResultFilters />
+        <ChampionsResult />
       </div>
     </ChampionWrapperStyled>
   );

@@ -143,19 +143,12 @@ export interface ChampSelectSession {
 
 export type ChampSelectSessionFunction = (data: ChampSelectSession) => void;
 
-export type NotConnectedLcuApi = {
-  clientIsNotOpen: true;
-};
-
-export type ConnectedLcuApi = {
+export type LcuApi = {
   GetChestEligibility: () => Promise<ChestEligibilityDTO>;
   GetCurrentSummoner: () => Promise<SummonerDTO>;
   GetChampionMastery: (summonerId: number) => Promise<ChampionMasteryDTO[]>;
   SetChampSelectSessionCallback: (callback: ChampSelectSessionFunction) => void;
   SwapWithChampion: (cahmpionId: number) => void;
-  clientIsNotOpen: false;
 };
 
-export type LcuApiCreator = (
-  pathToLeagueOfLegends: string
-) => NotConnectedLcuApi | ConnectedLcuApi;
+export type LcuApiCreator = (pathToLeagueOfLegends: string) => LcuApi;

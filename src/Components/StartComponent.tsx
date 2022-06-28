@@ -1,24 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SetupComponent from "./SetupComponent";
-import LcuApi from "../APIs/lcu-api";
 import LoadingComponent from "./LoadingComponent";
 import ChampionWrapper from "./ChampionWrapper";
 import useConfig from "../Hooks/useConfig";
 
 const StartComponent = () => {
-  const [config, setConfig] = useConfig();
+  const [config, clientIsOpen] = useConfig();
+
+  useEffect(() => console.log(config, clientIsOpen), [config, clientIsOpen]);
 
   if (!config.pathToLeagueOfLegendsIsValid) {
-    return <SetupComponent config={config} setConfig={setConfig} />;
+    return <SetupComponent />;
   }
 
-  const lcuApi = LcuApi(config.pathToLeagueOfLegends);
-
-  if (lcuApi.clientIsNotOpen === true) {
+  if (clientIsOpen === false) {
     return <LoadingComponent />;
   }
 
-  return <ChampionWrapper lcuApi={lcuApi} />;
+  return <ChampionWrapper />;
 };
 
 export default StartComponent;
