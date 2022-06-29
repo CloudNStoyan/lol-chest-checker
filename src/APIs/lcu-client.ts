@@ -1,0 +1,102 @@
+import { LcuCredentials } from "./lcu-connector";
+import WebSocket from "ws";
+import {
+  ChampionMasteryDTO,
+  ChampSelectSession,
+  ChampSelectSessionFunction,
+  ChestEligibilityDTO,
+  SummonerDTO,
+} from "./lcu-types";
+
+async function fetchRiot<T>(
+  credentials: LcuCredentials,
+  url: string,
+  method = "GET",
+  parseResponse = true
+) {
+  const headers = new Headers();
+  const buff = Buffer.from("riot:" + credentials.password);
+  const authorization = "Basic " + buff.toString("base64");
+  headers.append("Authorization", authorization);
+
+  const requestOptions = {
+    method: method,
+    headers,
+  };
+
+  const resp = await fetch(`${credentials.full}${url}`, requestOptions);
+
+  if (parseResponse) {
+    const json: T = await resp.json();
+
+    return json;
+  }
+}
+
+export const GetChestEligibility = async (credentials: LcuCredentials) => {
+  return await fetchRiot<ChestEligibilityDTO>(
+    credentials,
+    "lol-collections/v1/inventories/chest-eligibility"
+  );
+};
+
+export const GetCurrentSummoner = async (credentials: LcuCredentials) => {
+  return await fetchRiot<SummonerDTO>(
+    credentials,
+    "lol-summoner/v1/current-summoner"
+  );
+};
+
+export const GetChampionMastery = async (
+  credentials: LcuCredentials,
+  summonerId: number
+) => {
+  return await fetchRiot<ChampionMasteryDTO[]>(
+    credentials,
+    `lol-collections/v1/inventories/${summonerId}/champion-mastery`
+  );
+};
+
+export const SwapWithChampion = async (
+  credentials: LcuCredentials,
+  championId: number
+) => {
+  await fetchRiot(
+    credentials,
+    `lol-champ-select/v1/session/bench/swap/${championId}`,
+    "POST",
+    false
+  );
+};
+
+export const OnChampSelect = async (
+  credentials: LcuCredentials,
+  callback: ChampSelectSessionFunction
+) => {
+  const wsUrl = `wss://riot:${credentials.password}@127.0.0.1:${credentials.port}`;
+
+  const websocket = new WebSocket(wsUrl);
+  websocket.on("open", () => {
+    websocket.send(JSON.stringify([5, "OnJsonApiEvent"]));
+  });
+
+  websocket.on("message", (raw) => {
+    const json = raw.toString();
+
+    if (json.trim().length === 0) {
+      return;
+    }
+
+    const socketEvent = JSON.parse(json);
+
+    const data = socketEvent[2];
+
+    if (data.uri !== "/lol-champ-select/v1/session") {
+      return;
+    }
+
+    const sessionData: ChampSelectSession = data.data;
+
+    callback(sessionData);
+  });
+};

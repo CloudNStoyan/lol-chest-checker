@@ -1,33 +1,38 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { setFilterInput, setShowEarned } from "../store/leagueSlice";
+import {
+  FilterBrowseData,
+  setBrowseChampDataFilter,
+} from "../store/leagueSlice";
 import { useAppDispatch } from "../store/hooks";
+
+const initialFilter: FilterBrowseData = {
+  filter: "",
+  showEarned: true,
+};
 
 const ChampionsResultFilters: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const [hideEarned, setHideEarned] = useState(false);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState(initialFilter);
 
   useEffect(() => {
-    dispatch(setFilterInput(filter));
+    dispatch(setBrowseChampDataFilter(filter));
   }, [filter]);
-
-  useEffect(() => {
-    dispatch(setShowEarned(!hideEarned));
-  }, [hideEarned]);
 
   return (
     <>
       <input
         placeholder="Champion name.."
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
+        value={filter.filter}
+        onChange={(e) => setFilter({ ...filter, filter: e.target.value })}
         className="filter-input"
       />
       <div className="filter-chest-granted">
         <label htmlFor="filterChestGranted">Exclude Earned</label>
         <input
-          checked={!hideEarned}
-          onChange={(e) => setHideEarned(!e.target.checked)}
+          checked={filter.showEarned}
+          onChange={(e) => {
+            setFilter({ ...filter, showEarned: e.target.checked });
+          }}
           id="filterChestGranted"
           type="checkbox"
         />

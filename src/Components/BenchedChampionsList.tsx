@@ -3,14 +3,13 @@ import BenchedChampionsListStyled from "./styles/BenchedChampionsList.styled";
 import Champion from "./Champion";
 import ClickableChampion from "./ClickableChampion";
 import { useAppSelector } from "../store/hooks";
-import useLcu from "../Hooks/useLcu";
+import { SwapWithChampion } from "../APIs/lcu-client";
 
 const BenchedChampionsList: FunctionComponent = () => {
-  const { benchedChampions, selectedChampion } = useAppSelector(
+  const { benchedChampions, selectedChampion, lcuCredentials } = useAppSelector(
     (state) => state.leagueReducer
   );
 
-  const [lcu] = useLcu();
   return (
     <BenchedChampionsListStyled>
       {benchedChampions.length > 0 && (
@@ -19,7 +18,7 @@ const BenchedChampionsList: FunctionComponent = () => {
           <div className="bench-list">
             {benchedChampions.map((c, i) => (
               <ClickableChampion
-                onClick={() => lcu.SwapWithChampion(c.championId)}
+                onClick={() => SwapWithChampion(lcuCredentials, c.championId)}
                 data={c}
                 key={i}
               />
@@ -27,10 +26,14 @@ const BenchedChampionsList: FunctionComponent = () => {
           </div>
         </>
       )}
-      <h2>Current Pick</h2>
-      <div className="curr-champ">
-        <Champion data={selectedChampion} />
-      </div>
+      {selectedChampion && (
+        <>
+          <h2>Current Pick</h2>
+          <div className="curr-champ">
+            <Champion data={selectedChampion} />
+          </div>
+        </>
+      )}
     </BenchedChampionsListStyled>
   );
 };

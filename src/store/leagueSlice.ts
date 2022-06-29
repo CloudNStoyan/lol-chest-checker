@@ -1,22 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { LcuCredentials } from "../APIs/lcu-connector";
 import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 
-export interface LeagueState {
-  rawChampData: ChampionMasteryDTOWithData[];
-  browseChampData: ChampionMasteryDTOWithData[];
-  benchedChampions: ChampionMasteryDTOWithData[];
-  selectedChampion: ChampionMasteryDTOWithData;
-  filterInput: string;
+export interface FilterBrowseData {
+  filter: string;
   showEarned: boolean;
 }
 
+export interface LeagueState {
+  browseChampData: ChampionMasteryDTOWithData[];
+  browseChampDataFilter: FilterBrowseData;
+  benchedChampions: ChampionMasteryDTOWithData[];
+  selectedChampion: ChampionMasteryDTOWithData;
+  lcuCredentials: LcuCredentials;
+}
+
 const initialState: LeagueState = {
-  rawChampData: [],
   browseChampData: [],
+  browseChampDataFilter: null,
   benchedChampions: [],
   selectedChampion: null,
-  filterInput: null,
-  showEarned: true,
+  lcuCredentials: null,
 };
 
 const leagueSlice = createSlice({
@@ -27,13 +31,24 @@ const leagueSlice = createSlice({
       state,
       action: PayloadAction<ChampionMasteryDTOWithData[]>
     ) {
-      state.browseChampData = action.payload;
-    },
-    setRawChampData(
-      state,
-      action: PayloadAction<ChampionMasteryDTOWithData[]>
-    ) {
-      state.rawChampData = action.payload;
+      const data = [...action.payload];
+      data.sort((firstChamp, secondChamp) => {
+        if (
+          firstChamp.championData.name.toLowerCase() <
+          secondChamp.championData.name.toLowerCase()
+        ) {
+          return -1;
+        }
+        if (
+          firstChamp.championData.name.toLowerCase() >
+          secondChamp.championData.name.toLowerCase()
+        ) {
+          return 1;
+        }
+        return 0;
+      });
+
+      state.browseChampData = data;
     },
     setBenchedChampsData(
       state,
@@ -47,21 +62,20 @@ const leagueSlice = createSlice({
     ) {
       state.selectedChampion = action.payload;
     },
-    setFilterInput(state, action: PayloadAction<string>) {
-      state.filterInput = action.payload;
+    setBrowseChampDataFilter(state, action: PayloadAction<FilterBrowseData>) {
+      state.browseChampDataFilter = action.payload;
     },
-    setShowEarned(state, action: PayloadAction<boolean>) {
-      state.showEarned = action.payload;
+    setLcuCredentials(state, action: PayloadAction<LcuCredentials>) {
+      state.lcuCredentials = action.payload;
     },
   },
 });
 
 export const {
   setBrowseChampData,
-  setRawChampData,
+  setBrowseChampDataFilter,
   setBenchedChampsData,
   setSelectedChampion,
-  setFilterInput,
-  setShowEarned,
+  setLcuCredentials,
 } = leagueSlice.actions;
 export default leagueSlice.reducer;
