@@ -1,4 +1,4 @@
-import { ChampionMasteryDTOWithData, ChampionsDataDTO } from "./ddragon-types";
+import { ChampionsDataDTO } from "./ddragon-types";
 
 const DDragonApi = () => {
   let ChampionDataCache: ChampionsDataDTO | undefined = undefined;
@@ -46,18 +46,6 @@ const DDragonApi = () => {
     return champs.find((c) => c.key === championKey.toString());
   };
 
-  const PopulateChampData = async (data: ChampionMasteryDTOWithData[]) => {
-    const latestVersion = (await GetVersions())[0];
-    const championsJson = await GetChampionData(latestVersion);
-    const champs = Object.values(championsJson.data);
-
-    data.forEach((x) => {
-      x.championData = champs.find((y) => y.key === x.championId.toString());
-    });
-
-    return data;
-  };
-
   const GetLatestVersion = async () => (await GetVersions())[0];
 
   return {
@@ -65,7 +53,6 @@ const DDragonApi = () => {
     GetVersions,
     GetChampionData,
     GetChampionDataByKey,
-    PopulateChampData,
   };
 };
 

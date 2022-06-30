@@ -18,7 +18,9 @@ const BenchedChampionsList: FunctionComponent = () => {
           <div className="bench-list">
             {benchedChampions.map((c, i) => (
               <ClickableChampion
-                onClick={() => SwapWithChampion(lcuCredentials, c.championId)}
+                onClick={() =>
+                  SwapWithChampion(lcuCredentials, +c.championData.key)
+                }
                 data={c}
                 key={i}
               />

@@ -8,7 +8,8 @@ const ChampionStyled = styled.div`
   flex: 0 0 60px;
   height: 60px;
 
-  &.EARNED img {
+  &.ChestGrantedTrue img,
+  &.ChampOwnedFalse img {
     filter: grayscale(1);
   }
 

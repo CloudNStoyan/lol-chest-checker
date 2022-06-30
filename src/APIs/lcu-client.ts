@@ -2,6 +2,7 @@ import { LcuCredentials } from "./lcu-connector";
 import WebSocket from "ws";
 import {
   ChampionMasteryDTO,
+  ChampionMinimalDTO,
   ChampSelectSession,
   ChampSelectSessionFunction,
   ChestEligibilityDTO,
@@ -44,6 +45,13 @@ export const GetCurrentSummoner = async (credentials: LcuCredentials) => {
   return await fetchRiot<SummonerDTO>(
     credentials,
     "lol-summoner/v1/current-summoner"
+  );
+};
+
+export const GetChampionsMinimal = async (credentials: LcuCredentials) => {
+  return await fetchRiot<ChampionMinimalDTO[]>(
+    credentials,
+    "lol-champions/v1/owned-champions-minimal"
   );
 };
 

@@ -28,7 +28,7 @@ const ChampionsResult: FunctionComponent = () => {
     );
 
     if (!browseChampDataFilter.showEarned) {
-      data = data.filter((x) => !x.chestGranted);
+      data = data.filter((c) => !c.mastery?.chestGranted);
     }
 
     setFilteredChampData(data);

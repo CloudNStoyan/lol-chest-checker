@@ -61,6 +61,8 @@ export interface ChampionDTO {
   stats: ChampionStats;
 }
 
-export type ChampionMasteryDTOWithData = ChampionMasteryDTO & {
-  championData?: ChampionDTO;
+export type ChampionMasteryDTOWithData = {
+  mastery?: ChampionMasteryDTO;
+  championData: ChampionDTO;
+  owned: boolean;
 };

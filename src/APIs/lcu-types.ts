@@ -143,6 +143,40 @@ export interface ChampSelectSession {
 
 export type ChampSelectSessionFunction = (data: ChampSelectSession) => void;
 
+export interface ChampionMinimalDTORental {
+  endDate: number;
+  purchaseDate: number;
+  rented: boolean;
+  winCountRemaining: number;
+}
+
+export interface ChampionMinimalDTOOwnership {
+  freeToPlayReward: boolean;
+  owned: boolean;
+  rental: ChampionMinimalDTORental;
+}
+
+export interface ChampionMinimalDTO {
+  active: boolean;
+  alias: string;
+  banVoPath: string;
+  baseLoadScreenPath: string;
+  baseSplashPath: string;
+  botEnabled: boolean;
+  chooseVoPath: string;
+  disabledQueues: string[];
+  freeToPlay: boolean;
+  id: number;
+  name: string;
+  ownership: ChampionMinimalDTOOwnership;
+  purchased: number;
+  rankedPlayEnabled: boolean;
+  roles: string[];
+  squarePortraitPath: string;
+  stingerSfxPath: string;
+  title: string;
+}
+
 export type LcuApi = {
   GetChestEligibility: () => Promise<ChestEligibilityDTO>;
   GetCurrentSummoner: () => Promise<SummonerDTO>;

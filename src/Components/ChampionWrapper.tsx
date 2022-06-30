@@ -6,6 +6,7 @@ import ChampionsResultFilters from "./ChampionsResultFilters";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   GetChampionMastery,
+  GetChampionsMinimal,
   GetChestEligibility,
   GetCurrentSummoner,
   OnChampSelect,
@@ -16,6 +17,7 @@ import {
   SummonerDTO,
 } from "../APIs/lcu-types";
 import DDragonApi from "../APIs/ddragon-api";
+import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 import {
   setBenchedChampsData,
   setBrowseChampData,
@@ -32,12 +34,36 @@ const ChampionWrapper: FunctionComponent = () => {
 
   useEffect(() => {
     GetCurrentSummoner(credentials).then(async (summoner: SummonerDTO) => {
-      const masteries = await GetChampionMastery(
+      const masteryChampData = await GetChampionMastery(
         credentials,
         summoner.summonerId
       );
-      const data = await ddragon.PopulateChampData(masteries);
-      dispatch(setBrowseChampData(data));
+
+      const summonersChampsInfo = await GetChampionsMinimal(credentials);
+
+      const latestVersion = (await ddragon.GetVersions())[0];
+      const championsJson = await ddragon.GetChampionData(latestVersion);
+      const champs = Object.values(championsJson.data);
+
+      const champsData = champs.map((champ) => {
+        const mastery = masteryChampData.find(
+          (c) => c.championId.toString() === champ.key
+        );
+
+        const champInfoMinimal = summonersChampsInfo.find(
+          (c) => c.id.toString() === champ.key
+        );
+
+        const champData: ChampionMasteryDTOWithData = {
+          championData: champ,
+          mastery,
+          owned: champInfoMinimal.ownership.owned,
+        };
+
+        return champData;
+      });
+
+      dispatch(setBrowseChampData(champsData));
 
       OnChampSelect(credentials, async (session: ChampSelectSession) => {
         const playerCellId = session.localPlayerCellId;
@@ -51,10 +77,12 @@ const ChampionWrapper: FunctionComponent = () => {
           (c) => c.cellId === playerCellId
         );
 
-        const champ = data.find((c) => c.championId === playerData.championId);
+        const champ = champsData.find(
+          (c) => +c.championData.key === playerData.championId
+        );
 
-        const benchChamps = data.filter((c) =>
-          session.benchChampionIds.includes(c.championId)
+        const benchChamps = champsData.filter((c) =>
+          session.benchChampionIds.includes(+c.championData.key)
         );
 
         dispatch(setSelectedChampion(champ));

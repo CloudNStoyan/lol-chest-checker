@@ -12,10 +12,15 @@ const Champion: FunctionComponent<ChampionProps> = ({ data }) => {
   }
 
   const img = `http://ddragon.leagueoflegends.com/cdn/12.11.1/img/champion/${data.championData.id}.png`;
-  const additionalClassName = data.chestGranted ? "EARNED" : "AVAILABLE";
+  const additionalClassName = `${
+    data.mastery?.chestGranted === true
+      ? "ChestGrantedTrue"
+      : "ChestGrantedFalse"
+  } ${data.owned === false ? "ChampOwnedFalse" : "ChampOwnedTrue"}`;
   return (
     <ChampionStyled className={additionalClassName}>
-      {additionalClassName === "EARNED" ? <span>EARNED</span> : <></>}
+      {data.mastery?.chestGranted === true ? <span>EARNED</span> : <></>}
+      {data.owned === false ? <span>Buy</span> : <></>}
       <img src={img} />
     </ChampionStyled>
   );
