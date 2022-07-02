@@ -78,11 +78,11 @@ const ChampionWrapper: FunctionComponent = () => {
         );
 
         const champ = champsData.find(
-          (c) => +c.championData.key === playerData.championId
+          (c) => Number(c.championData.key) === playerData.championId
         );
 
         const benchChamps = champsData.filter((c) =>
-          session.benchChampionIds.includes(+c.championData.key)
+          session.benchChampionIds.includes(Number(c.championData.key))
         );
 
         dispatch(setSelectedChampion(champ));
