@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LcuCredentials } from "../APIs/lcu-connector";
 import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
+import { ChestEligibilityDTO } from "../APIs/lcu-types";
 
 export interface FilterBrowseData {
   filter: string;
@@ -13,6 +14,7 @@ export interface LeagueState {
   benchedChampions: ChampionMasteryDTOWithData[];
   selectedChampion: ChampionMasteryDTOWithData;
   lcuCredentials: LcuCredentials;
+  chestEligibility: ChestEligibilityDTO;
 }
 
 const initialState: LeagueState = {
@@ -21,6 +23,7 @@ const initialState: LeagueState = {
   benchedChampions: [],
   selectedChampion: null,
   lcuCredentials: null,
+  chestEligibility: null,
 };
 
 const leagueSlice = createSlice({
@@ -68,6 +71,9 @@ const leagueSlice = createSlice({
     setLcuCredentials(state, action: PayloadAction<LcuCredentials>) {
       state.lcuCredentials = action.payload;
     },
+    setChestEligibility(state, action: PayloadAction<ChestEligibilityDTO>) {
+      state.chestEligibility = action.payload;
+    },
   },
 });
 
@@ -77,5 +83,6 @@ export const {
   setBenchedChampsData,
   setSelectedChampion,
   setLcuCredentials,
+  setChestEligibility,
 } = leagueSlice.actions;
 export default leagueSlice.reducer;

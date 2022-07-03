@@ -21,8 +21,10 @@ import { ChampionMasteryDTOWithData } from "../APIs/ddragon-types";
 import {
   setBenchedChampsData,
   setBrowseChampData,
+  setChestEligibility,
   setSelectedChampion,
 } from "../store/leagueSlice";
+import HextechChestTracker from "./HextechChestTracker";
 
 const ddragon = DDragonApi();
 
@@ -92,13 +94,14 @@ const ChampionWrapper: FunctionComponent = () => {
 
     GetChestEligibility(credentials).then(
       (chestEligibility: ChestEligibilityDTO) => {
-        console.log(chestEligibility);
+        dispatch(setChestEligibility(chestEligibility));
       }
     );
   }, [credentials]);
 
   return (
     <ChampionWrapperStyled>
+      <HextechChestTracker />
       <BenchedChampionsList />
       <h2>Browse Champions</h2>
       <div>
