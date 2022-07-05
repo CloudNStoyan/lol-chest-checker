@@ -4,6 +4,7 @@ import Champion from "./Champion";
 import ClickableChampion from "./ClickableChampion";
 import { useAppSelector } from "../store/hooks";
 import { SwapWithChampion } from "../APIs/lcu-client";
+import UsefulLinks from "./UsefulLinks";
 
 const BenchedChampionsList: FunctionComponent = () => {
   const { benchedChampions, selectedChampion, lcuCredentials } = useAppSelector(
@@ -33,6 +34,7 @@ const BenchedChampionsList: FunctionComponent = () => {
           <h2>Current Pick</h2>
           <div className="curr-champ">
             <Champion data={selectedChampion} />
+            <UsefulLinks currentPick={selectedChampion} />
           </div>
         </>
       )}
