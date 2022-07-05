@@ -59,7 +59,7 @@ const ChampionWrapper: FunctionComponent = () => {
         const champData: ChampionMasteryDTOWithData = {
           championData: champ,
           mastery,
-          owned: champInfoMinimal.ownership.owned,
+          owned: champInfoMinimal?.ownership.owned,
         };
 
         return champData;
