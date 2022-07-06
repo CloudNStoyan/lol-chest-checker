@@ -18,7 +18,10 @@ const Champion: FunctionComponent<ChampionProps> = ({ data }) => {
       : "ChestGrantedFalse"
   } ${data.owned === false ? "ChampOwnedFalse" : "ChampOwnedTrue"}`;
   return (
-    <ChampionStyled className={additionalClassName}>
+    <ChampionStyled
+      className={additionalClassName}
+      data-testid="champion-styled"
+    >
       {data.mastery?.chestGranted === true ? <span>EARNED</span> : <></>}
       {data.owned === false ? <span>Buy</span> : <></>}
       <img src={img} />
