@@ -14,6 +14,7 @@ const OutsideLink: FunctionComponent<OutsideLinkProps> = ({
 }) => {
   return (
     <a
+      data-testid="link"
       className={className}
       href="#"
       onClick={(e) => {

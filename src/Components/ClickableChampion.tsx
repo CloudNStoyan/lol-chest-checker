@@ -11,7 +11,7 @@ const ClickableChampion: FunctionComponent<ClickableChampionProps> = ({
   onClick,
 }) => {
   return (
-    <a href="#" onClick={onClick}>
+    <a href="#" onClick={onClick} data-testid="button">
       <Champion data={data} />
     </a>
   );
