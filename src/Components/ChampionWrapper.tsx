@@ -5,13 +5,6 @@ import ChampionWrapperStyled from "./styles/ChampionWrapper.styled";
 import ChampionsResultFilters from "./ChampionsResultFilters";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
-  GetChampionMastery,
-  GetChampionsMinimal,
-  GetChestEligibility,
-  GetCurrentSummoner,
-  OnChampSelect,
-} from "../APIs/lcu-client";
-import {
   ChampSelectSession,
   ChestEligibilityDTO,
   SummonerDTO,
@@ -33,15 +26,19 @@ const ChampionWrapper: FunctionComponent = () => {
   const credentials = useAppSelector(
     (state) => state.leagueReducer.lcuCredentials
   );
+  const {
+    GetChampionMastery,
+    GetChampionsMinimal,
+    GetChestEligibility,
+    GetCurrentSummoner,
+    OnChampSelect,
+  } = useAppSelector((state) => state.lcuReducer);
 
   useEffect(() => {
-    GetCurrentSummoner(credentials).then(async (summoner: SummonerDTO) => {
-      const masteryChampData = await GetChampionMastery(
-        credentials,
-        summoner.summonerId
-      );
+    GetCurrentSummoner().then(async (summoner: SummonerDTO) => {
+      const masteryChampData = await GetChampionMastery(summoner.summonerId);
 
-      const summonersChampsInfo = await GetChampionsMinimal(credentials);
+      const summonersChampsInfo = await GetChampionsMinimal();
 
       const latestVersion = (await ddragon.GetVersions())[0];
       const championsJson = await ddragon.GetChampionData(latestVersion);
@@ -67,7 +64,7 @@ const ChampionWrapper: FunctionComponent = () => {
 
       dispatch(setBrowseChampData(champsData));
 
-      OnChampSelect(credentials, async (session: ChampSelectSession) => {
+      OnChampSelect(async (session: ChampSelectSession) => {
         const playerCellId = session.localPlayerCellId;
         if (playerCellId === -1) {
           dispatch(setSelectedChampion(undefined));
@@ -92,11 +89,9 @@ const ChampionWrapper: FunctionComponent = () => {
       });
     });
 
-    GetChestEligibility(credentials).then(
-      (chestEligibility: ChestEligibilityDTO) => {
-        dispatch(setChestEligibility(chestEligibility));
-      }
-    );
+    GetChestEligibility().then((chestEligibility: ChestEligibilityDTO) => {
+      dispatch(setChestEligibility(chestEligibility));
+    });
   }, [credentials]);
 
   return (
