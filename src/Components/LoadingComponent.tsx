@@ -3,8 +3,7 @@ import { setClientIsOpen } from "../store/configSlice";
 import GetLCUCredentials from "../APIs/lcu-connector";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import LoadingComponentStyled from "./styles/LoadingComponent.styled";
-import { setLcuCredentials } from "../store/leagueSlice";
-import { setupLcu } from "../store/lcuSlice";
+import { SetCredentials } from "../APIs/lcu-client";
 
 const LoadingComponent = () => {
   const dispatch = useAppDispatch();
@@ -16,8 +15,7 @@ const LoadingComponent = () => {
       return;
     }
 
-    dispatch(setLcuCredentials(cred));
-    dispatch(setupLcu(cred));
+    SetCredentials(cred);
     dispatch(setClientIsOpen(true));
   }, [config]);
 

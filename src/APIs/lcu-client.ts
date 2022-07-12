@@ -9,12 +9,7 @@ import {
   SummonerDTO,
 } from "./lcu-types";
 
-async function fetchRiot<T>(
-  credentials: LcuCredentials,
-  url: string,
-  method = "GET",
-  parseResponse = true
-) {
+async function fetchRiot<T>(url: string, method = "GET", parseResponse = true) {
   const headers = new Headers();
   const buff = Buffer.from("riot:" + credentials.password);
   const authorization = "Basic " + buff.toString("base64");
@@ -34,53 +29,43 @@ async function fetchRiot<T>(
   }
 }
 
-export const GetChestEligibility = async (credentials: LcuCredentials) => {
+let credentials: LcuCredentials = null;
+
+export const SetCredentials = (cred: LcuCredentials) => {
+  credentials = cred;
+};
+
+export const GetChestEligibility = async () => {
   return await fetchRiot<ChestEligibilityDTO>(
-    credentials,
     "lol-collections/v1/inventories/chest-eligibility"
   );
 };
 
-export const GetCurrentSummoner = async (credentials: LcuCredentials) => {
-  return await fetchRiot<SummonerDTO>(
-    credentials,
-    "lol-summoner/v1/current-summoner"
-  );
+export const GetCurrentSummoner = async () => {
+  return await fetchRiot<SummonerDTO>("lol-summoner/v1/current-summoner");
 };
 
-export const GetChampionsMinimal = async (credentials: LcuCredentials) => {
+export const GetChampionsMinimal = async () => {
   return await fetchRiot<ChampionMinimalDTO[]>(
-    credentials,
     "lol-champions/v1/owned-champions-minimal"
   );
 };
 
-export const GetChampionMastery = async (
-  credentials: LcuCredentials,
-  summonerId: number
-) => {
+export const GetChampionMastery = async (summonerId: number) => {
   return await fetchRiot<ChampionMasteryDTO[]>(
-    credentials,
     `lol-collections/v1/inventories/${summonerId}/champion-mastery`
   );
 };
 
-export const SwapWithChampion = async (
-  credentials: LcuCredentials,
-  championId: number
-) => {
+export const SwapWithChampion = async (championId: number) => {
   await fetchRiot(
-    credentials,
     `lol-champ-select/v1/session/bench/swap/${championId}`,
     "POST",
     false
   );
 };
 
-export const OnChampSelect = async (
-  credentials: LcuCredentials,
-  callback: ChampSelectSessionFunction
-) => {
+export const OnChampSelect = async (callback: ChampSelectSessionFunction) => {
   const wsUrl = `wss://riot:${credentials.password}@127.0.0.1:${credentials.port}`;
 
   const websocket = new WebSocket(wsUrl);

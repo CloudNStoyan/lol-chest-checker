@@ -7,7 +7,7 @@ import { SwapWithChampion } from "../APIs/lcu-client";
 import UsefulLinks from "./UsefulLinks";
 
 const BenchedChampionsList: FunctionComponent = () => {
-  const { benchedChampions, selectedChampion, lcuCredentials } = useAppSelector(
+  const { benchedChampions, selectedChampion } = useAppSelector(
     (state) => state.leagueReducer
   );
 
@@ -19,9 +19,7 @@ const BenchedChampionsList: FunctionComponent = () => {
           <div className="bench-list">
             {benchedChampions.map((c, i) => (
               <ClickableChampion
-                onClick={() =>
-                  SwapWithChampion(lcuCredentials, Number(c.championData.key))
-                }
+                onClick={() => SwapWithChampion(Number(c.championData.key))}
                 data={c}
                 key={i}
               />

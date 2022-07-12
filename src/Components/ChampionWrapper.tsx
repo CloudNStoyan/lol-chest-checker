@@ -3,7 +3,14 @@ import BenchedChampionsList from "./BenchedChampionsList";
 import ChampionsResult from "./ChampionsResult";
 import ChampionWrapperStyled from "./styles/ChampionWrapper.styled";
 import ChampionsResultFilters from "./ChampionsResultFilters";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppDispatch } from "../store/hooks";
+import {
+  GetChampionMastery,
+  GetChampionsMinimal,
+  GetChestEligibility,
+  GetCurrentSummoner,
+  OnChampSelect,
+} from "../APIs/lcu-client";
 import {
   ChampSelectSession,
   ChestEligibilityDTO,
@@ -23,16 +30,6 @@ const ddragon = DDragonApi();
 
 const ChampionWrapper: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const credentials = useAppSelector(
-    (state) => state.leagueReducer.lcuCredentials
-  );
-  const {
-    GetChampionMastery,
-    GetChampionsMinimal,
-    GetChestEligibility,
-    GetCurrentSummoner,
-    OnChampSelect,
-  } = useAppSelector((state) => state.lcuReducer);
 
   useEffect(() => {
     GetCurrentSummoner().then(async (summoner: SummonerDTO) => {
@@ -92,7 +89,7 @@ const ChampionWrapper: FunctionComponent = () => {
     GetChestEligibility().then((chestEligibility: ChestEligibilityDTO) => {
       dispatch(setChestEligibility(chestEligibility));
     });
-  }, [credentials]);
+  }, []);
 
   return (
     <ChampionWrapperStyled>

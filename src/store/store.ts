@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import configReducer from "./configSlice";
 import leagueReducer from "./leagueSlice";
-import lcuReducer from "./lcuSlice";
 
 export const store = configureStore({
   reducer: {
     configReducer,
     leagueReducer,
-    lcuReducer,
   },
 });
 
