@@ -15,6 +15,12 @@ beforeEach(() => {
   };
 
   Storage.prototype.getItem = (key: string) => mockStorage[key];
+
+  global.fetch = jest.fn().mockImplementation((url) => {
+    console.log(url);
+
+    return Promise.resolve({});
+  }) as jest.Mock;
 });
 
 test("start component state rendering works properly", () => {
