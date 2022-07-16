@@ -77,11 +77,32 @@ const ChampionWrapper: FunctionComponent = () => {
           (c) => Number(c.championData.key) === playerData.championId
         );
 
+        if (champ != null) {
+          dispatch(setSelectedChampion(champ));
+        } else {
+          const pickActions = session.actions.filter(
+            (action) => action.length > 0 && action[0].type === "pick"
+          );
+
+          const pickAction = pickActions
+            .reduce((previous, current) => [...previous, ...current], [])
+            .find((action) => action.actorCellId === playerCellId);
+
+          if (pickAction != null) {
+            dispatch(
+              setSelectedChampion(
+                champsData.find(
+                  (c) => Number(c.championData.key) === pickAction.championId
+                )
+              )
+            );
+          }
+        }
+
         const benchChamps = champsData.filter((c) =>
           session.benchChampionIds.includes(Number(c.championData.key))
         );
 
-        dispatch(setSelectedChampion(champ));
         dispatch(setBenchedChampsData(benchChamps));
       });
     });
