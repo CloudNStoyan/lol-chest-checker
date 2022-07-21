@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../store/hooks";
+import { setChestEligibility } from "../store/leagueSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import HextechChestTrackerStyled from "./styles/HextechChestTracker.styled";
 
 const HextechChestTracker = () => {
   const [currentClock, setCurrentClock] = useState("");
+  const dispatch = useAppDispatch();
   const chestEligibility = useAppSelector(
     (state) => state.leagueReducer.chestEligibility
   );
@@ -23,6 +25,12 @@ const HextechChestTracker = () => {
     const minutes = seconds / 60;
     const hours = minutes / 60;
     const days = hours / 24;
+
+    if (seconds < 5) {
+      const newChestEligibility = Object.assign({}, chestEligibility);
+      newChestEligibility.nextChestRechargeTime += 604800000;
+      dispatch(setChestEligibility(newChestEligibility));
+    }
 
     setCurrentClock(
       `${formatNumber(days)}:${formatNumber(hours % 24)}:${formatNumber(
