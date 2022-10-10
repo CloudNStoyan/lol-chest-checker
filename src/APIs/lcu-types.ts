@@ -111,6 +111,11 @@ export interface ChampSelectSessionTrade {
   state: string;
 }
 
+export interface BenchChampData {
+  championId: number;
+  priority: boolean;
+}
+
 export interface ChampSelectSession {
   actions: ChampSelectSessionActionActor[][];
   allowBattleBoost: boolean;
@@ -119,7 +124,7 @@ export interface ChampSelectSession {
   allowRerolling: boolean;
   allowSkinSelection: boolean;
   bans: ChampSelectSessionBans;
-  benchChampionIds: number[];
+  benchChampions: BenchChampData[];
   benchEnabled: boolean;
   boostableSkinCount: number;
   chatDetails: ChampSelectSessionChatDetails;

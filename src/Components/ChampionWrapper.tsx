@@ -99,8 +99,12 @@ const ChampionWrapper: FunctionComponent = () => {
           }
         }
 
+        const benchChampIds = session.benchChampions.map(
+          (champ) => champ.championId
+        );
+
         const benchChamps = champsData.filter((c) =>
-          session.benchChampionIds.includes(Number(c.championData.key))
+          benchChampIds.includes(Number(c.championData.key))
         );
 
         dispatch(setBenchedChampsData(benchChamps));
