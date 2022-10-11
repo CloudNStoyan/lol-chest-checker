@@ -12,7 +12,7 @@ const Champion: FunctionComponent<ChampionProps> = ({ data }) => {
   }
 
   const img = `http://ddragon.leagueoflegends.com/cdn/${data.championData.version}/img/champion/${data.championData.id}.png`;
-  const additionalClassName = `${
+  const additionalClassName = `champ__data ${
     data.mastery?.chestGranted === true
       ? "ChestGrantedTrue"
       : "ChestGrantedFalse"

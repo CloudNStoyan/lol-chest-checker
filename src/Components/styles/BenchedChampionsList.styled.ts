@@ -14,6 +14,10 @@ const BenchedChampionsListStyled = styled.div`
   .curr-champ {
     margin: 0 auto;
     margin-bottom: 20px;
+
+    .champ__data {
+      margin: 0 auto;
+    }
   }
 `;
 
